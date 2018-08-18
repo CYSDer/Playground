@@ -78,19 +78,13 @@ print("插入排序: \(arr3)")
 //归并排序
 func mergeSort(arr: Array<Int>) -> Array<Int> {
     let len = arr.count
-    if len < 2 {
+    guard len > 1 else {
         return arr
     }
     
     let middle = len / 2
-    var leftArr = [Int](), rightArr = [Int]()
-    for i in 0 ..< len {
-        if i < middle {
-            leftArr.append(arr[i])
-        } else {
-            rightArr.append(arr[i])
-        }
-    }
+    let leftArr = Array(arr[0..<middle])
+    let rightArr = Array(arr[middle..<len])
     
     return merge(left: mergeSort(arr: leftArr), right: mergeSort(arr: rightArr))
 }
@@ -148,6 +142,7 @@ func partition(_ arr: inout Array<Int>, _ left: Int, _ right: Int) -> Int {
 }
 
 func swapArr(_ arr: inout Array<Int>, _ i: Int, _ j: Int) {
+    if i == j { return }
     let temp = arr[i]
     arr[i] = arr[j]
     arr[j] = temp
@@ -248,6 +243,6 @@ func selectIndex(_ arr: inout Array<Int>, _ left: Int, _ right: Int, _ index: In
 }
 
 var selectArr = [9, 6, 4, 2, 1, 3, 7, 8, 5]
-let index = 5
+let index = Int(arc4random_uniform(8))
 let value = selectIndex(&selectArr, 0, selectArr.count - 1, index)
 print("第\(index)个大的数为: \(value)")

@@ -366,14 +366,16 @@ extension ViewController {
 
 PlaygroundPage.current.liveView = ViewController()
 
+var aClosure: () -> Void = {}
 
-@objcMembers class User: NSObject {
-    dynamic var name:  String
-    init(name: String) {
-        self.name = name
-    }
+func escapingClosure(closure: @escaping () -> Void) {
+    aClosure = closure
 }
 
+escapingClosure {
+    print("hello")
+}
 
+aClosure()
 
 
