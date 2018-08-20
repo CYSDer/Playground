@@ -10,10 +10,36 @@ protocol Stack {
     
     var isEmpty: Bool { get }
     var size: Int { get }
-    var peek: Element? {  get }
+    var peek: Element? { mutating get }
     
     mutating func push(_ newElement: Element)
     mutating func pop() -> Element?
+}
+
+struct IntegerStack: Stack {
+    typealias Element = Int
+    
+    var stack = [Element]()
+    
+    var isEmpty: Bool {
+        return stack.isEmpty
+    }
+    
+    var size: Int {
+        return stack.count
+    }
+    
+    var peek: Int? {
+        return stack.last
+    }
+    
+    mutating func push(_ newElement: Int) {
+        stack.append(newElement)
+    }
+    
+    mutating func pop() -> Int? {
+        return stack.popLast()
+    }
 }
 
 // 堆定义
@@ -21,11 +47,133 @@ protocol Queue {
     associatedtype Element
     
     var isEmpty: Bool { get }
-    var size: Bool { get }
-    var peek: Element? { get }
+    var size: Int { get }
+    var peek: Element? { mutating get }
     
     mutating func enqueue(_ newElement: Element)
     mutating func dequeue() -> Element?
+}
+
+struct IntegerQueue: Queue {
+    typealias Element = Int
+    
+    var queue = [Element]()
+    
+    var isEmpty: Bool {
+        return queue.isEmpty
+    }
+    
+    var size: Int {
+        return queue.count
+    }
+    
+    var peek: Int? {
+        return queue.first
+    }
+    
+    var capacity: Int {
+        set {
+            queue.reserveCapacity(newValue)
+        }
+        get {
+            return queue.capacity
+        }
+    }
+    
+    mutating func enqueue(_ newElement: Int) {
+        queue.append(newElement)
+    }
+    
+    mutating func dequeue() -> Int? {
+        return queue.removeFirst()
+    }
+}
+
+// 用栈实现队列
+struct MyQueue: Queue {
+    typealias Element = Int
+    
+    var stackA = IntegerStack()
+    var stackB = IntegerStack()
+    
+    var isEmpty: Bool {
+        return stackA.isEmpty && stackB.isEmpty
+    }
+    
+    var size: Int {
+        return stackA.size + stackB.size
+    }
+    
+    var peek: Int? {
+        mutating get {
+            shift()
+            return stackB.peek
+        }
+    }
+    
+    mutating func enqueue(_ newElement: Int) {
+        stackA.push(newElement)
+    }
+    
+    mutating func dequeue() -> Int? {
+        shift()
+        return stackB.pop()
+    }
+    
+    mutating private func shift() {
+        if stackB.isEmpty {
+            while !stackA.isEmpty {
+                stackB.push(stackA.pop()!)
+            }
+        }
+    }
+}
+
+// 利用队列实现栈
+struct MyStack: Stack {
+    typealias Element = Int
+    
+    var queueA = IntegerQueue()
+    var queueB = IntegerQueue()
+    
+    var isEmpty: Bool {
+        return queueA.isEmpty && queueB.isEmpty
+    }
+    
+    var size: Int {
+        return queueA.size
+    }
+    
+    var peek: Int? {
+        mutating get {
+            shift()
+            let peekObj = queueA.peek
+            queueB.enqueue(queueA.dequeue()!)
+            swap()
+            return peekObj
+        }
+    }
+    
+    mutating func push(_ newElement: Int) {
+        queueA.enqueue(newElement)
+    }
+    
+    mutating func pop() -> Int? {
+        shift()
+        let popObjc = queueA.dequeue()
+        swap()
+        return popObjc
+    }
+    
+    mutating private func shift() {
+        while queueA.size != 1 {
+            queueB.enqueue(queueA.dequeue()!)
+        }
+    }
+    
+    mutating private func swap() {
+        (queueA, queueB) = (queueB, queueA)
+    }
 }
 
 // 二叉树定义

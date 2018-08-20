@@ -548,9 +548,77 @@ class Sodution {
     }
     
 }
-Sodution()
+//Sodution()
+
+class SolutionC {
+    func combinationSum(_ candidates: [Int], _ target: Int) -> [[Int]] {
+        var res = [[Int]]()
+        var item = [Int]()
+        backTrack(candidates.filter{ $0 <= target }, 0, target, &item, &res)
+        return res
+    }
+    
+    func backTrack(_ candidates: [Int], _ start: Int, _ target: Int, _ item: inout [Int] , _ res: inout [[Int]]) {
+        if target < 0 {
+            return
+        }
+        
+        if target == 0 {
+            res.append(item)
+            return
+        }
+        
+        for i in start..<candidates.count {
+            item.append(candidates[i])
+            backTrack(candidates, i + 1, target - candidates[i], &item, &res)
+            item.popLast()
+        }
+    }
+    
+    init() {
+        print(combinationSum([10,1,2,7,6,1,5], 8))
+    }
+}
+//SolutionC()
 
 
-
-
+class SolutionS {
+    func threeSum(_ nums: [Int]) -> [[Int]] {
+        var res = [[Int]]()
+        guard nums.count > 2 else {
+            return res
+        }
+        nums.sorted()
+        
+        for i in 0..<nums.count - 2 {
+            if i > 0 && nums[i] == nums[i - 1] {
+                break
+            }
+            
+            var j = i + 1
+            var k = nums.count - 2
+            
+            while j < k {
+                let sum = nums[i] + nums[j] + nums[k]
+                if sum > 0 {
+                    k -=  1
+                } else if sum < 0 {
+                    j += 1
+                } else {
+                    res.append([nums[i], nums[j], nums[k]])
+                    while nums[j + 1] == nums[j] {
+                        j += 1
+                    }
+                    j += 1
+                }
+            }
+        }
+        return res
+    }
+    
+    init() {
+        print(threeSum([-1, 0, 1, 2, -1, -4]))
+    }
+}
+SolutionS()
 
