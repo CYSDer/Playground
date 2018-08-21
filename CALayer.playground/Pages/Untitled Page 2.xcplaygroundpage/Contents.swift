@@ -303,6 +303,7 @@ class ViewController: UITableViewController {
     
     override  func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.setEditing(true, animated: true)
         configureTableViewDataSource()
 
 //        let refreshControl = UIRefreshControl()
@@ -344,9 +345,15 @@ extension ViewController {
         cell.textLabel?.text =  "\(nums[indexPath.row])"
         return cell
     }
-}
-
-extension ViewController {
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let moveItem = nums[sourceIndexPath.row]
         nums.remove(at: sourceIndexPath.row)
@@ -363,7 +370,6 @@ extension ViewController {
         }
     }
 }
-
 PlaygroundPage.current.liveView = ViewController()
 
 var aClosure: () -> Void = {}
