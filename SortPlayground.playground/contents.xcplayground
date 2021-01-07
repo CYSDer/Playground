@@ -4,5 +4,6 @@
         <page name='SortArray'/>
         <page name='String'/>
         <page name='ListNode'/>
+        <page name='TreeNode'/>
     </pages>
 </playground>

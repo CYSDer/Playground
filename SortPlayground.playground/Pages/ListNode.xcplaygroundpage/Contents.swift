@@ -23,7 +23,7 @@ class RandomListNode {
 
 class ListNodeSolution {
     // 链表反转
-    func reverseList(_ head: ListNode?) -> ListNode? {
+    static func reverseList(_ head: ListNode?) -> ListNode? {
 
         var head = head
         var next: ListNode?
@@ -40,8 +40,8 @@ class ListNodeSolution {
     }
     
     // 链表反转（递归）
-    func recurseReverseList(_ head: ListNode?) -> ListNode? {
-        if head == nil, head?.next == nil {
+    static func recurseReverseList(_ head: ListNode?) -> ListNode? {
+        if head == nil || head?.next == nil {
             return head
         }
         
@@ -53,7 +53,7 @@ class ListNodeSolution {
     }
     
     // 递归反向打印链表
-    func printListReverse(head: ListNode?) {
+    static func printListReverse(head: ListNode?) {
         if head != nil {
             if head?.next != nil {
                 printListReverse(head: head?.next)
@@ -63,7 +63,7 @@ class ListNodeSolution {
     }
     
     // 判断链表是否有环
-    func isLoopList(head: ListNode?) -> Bool {
+    static func isLoopList(head: ListNode?) -> Bool {
         var slowPointer = head, fastPointer = head
         
         while fastPointer != nil, fastPointer?.next != nil {
@@ -78,7 +78,7 @@ class ListNodeSolution {
     }
     
     // 计算环形链表出现环时的节点（空间复杂度O(1)）
-    func detectCycle(head: ListNode?) -> ListNode? {
+    static func detectCycle(head: ListNode?) -> ListNode? {
         var slowPointer = head
         var fastPointer = head
         while fastPointer != nil {
@@ -100,7 +100,7 @@ class ListNodeSolution {
     }
     
     // 计算链表环的长度
-    func getCycleLength(head: ListNode?) -> Int {
+    static func getCycleLength(head: ListNode?) -> Int {
         var slowPointer = head
         var fastPointer = head
         while fastPointer != nil {
@@ -123,7 +123,7 @@ class ListNodeSolution {
     }
     
     // 删除链表某个节点（要求时间复杂度O(1)）
-    func deleteNode(head: ListNode?, deleteNode: ListNode?) {
+    static func deleteNode(head: ListNode?, deleteNode: ListNode?) {
         if head == nil || deleteNode == nil {
             return
         }
@@ -142,7 +142,7 @@ class ListNodeSolution {
     }
     
     // 求两个链表的公共节点
-    func findFirstCommonNode(node1: ListNode?, node2: ListNode?) -> ListNode? {
+    static func findFirstCommonNode(node1: ListNode?, node2: ListNode?) -> ListNode? {
         
         if node1 == nil || node2 == nil {
             return nil
@@ -187,7 +187,7 @@ class ListNodeSolution {
     }
     
     // 合并两个有序链表
-    func mergeList(node1: ListNode?, node2: ListNode?) -> ListNode? {
+    static func mergeList(node1: ListNode?, node2: ListNode?) -> ListNode? {
         if node1 == nil && node2 == nil {
             return nil
         }
@@ -217,7 +217,7 @@ class ListNodeSolution {
     }
     
     // 复制复杂的链表
-    func cloneRandomList(head: RandomListNode?) -> RandomListNode? {
+    static func cloneRandomList(head: RandomListNode?) -> RandomListNode? {
         if head == nil {
             return nil
         }
@@ -255,3 +255,46 @@ class ListNodeSolution {
     }
     
 }
+
+func printList(_ head: ListNode?) {
+    var head = head
+    var nodeArr = [String]()
+    while head != nil {
+        nodeArr.append("\(head!.val)")
+        head = head?.next
+    }
+    print(nodeArr.joined(separator: "->"))
+}
+
+let head = ListNode(0)
+let node1 = ListNode(1)
+let node2 = ListNode(2)
+let node3 = ListNode(3)
+let node4 = ListNode(4)
+let node5 = ListNode(5)
+let node6 = ListNode(6)
+
+head.next = node1
+node1.next = node2
+node2.next = node3
+node3.next = node4
+node4.next = node5
+node5.next = node6
+printList(head)
+
+let reverseList = ListNodeSolution.reverseList(head)
+printList(reverseList)
+let recurseReverseList = ListNodeSolution.recurseReverseList(reverseList)
+printList(recurseReverseList)
+ListNodeSolution.printListReverse(head: recurseReverseList)
+
+print(ListNodeSolution.isLoopList(head: recurseReverseList))
+
+let node7 = ListNode(7)
+node6.next = node7
+node7.next = node3
+
+print(ListNodeSolution.isLoopList(head: recurseReverseList))
+let cycleNodel = ListNodeSolution.detectCycle(head: recurseReverseList)
+print(cycleNodel?.val ?? -1)
+print(ListNodeSolution.getCycleLength(head: recurseReverseList))
