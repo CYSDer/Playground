@@ -508,7 +508,7 @@ extension ViewController {
         nums.insert(moveItem, at: destinationIndexPath.row)
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
         case .delete:
             nums.remove(at: indexPath.row)

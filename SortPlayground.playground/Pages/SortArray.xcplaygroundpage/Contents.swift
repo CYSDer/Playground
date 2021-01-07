@@ -94,7 +94,7 @@ func merge(left: Array<Int>, right: Array<Int>) -> Array<Int> {
     var result = [Int]()
     
     while left.count > 0 && right.count > 0 {
-        if left[0] <= right[0] {
+        if left.first! <= right.first! {
             result.append(left.removeFirst())
         } else {
             result.append(right.removeFirst())
@@ -118,13 +118,11 @@ print("归并排序: \(arr4)")
 
 //快速排序
 func quickSort(arr: inout Array<Int>, left: Int, right: Int) {
-    var partitionIndex = 0
+    guard left < right else { return }
     
-    if left < right {
-        partitionIndex = partition(&arr, left, right)
-        quickSort(arr: &arr, left: left, right: partitionIndex - 1)
-        quickSort(arr: &arr, left: partitionIndex + 1, right: right)
-    }
+    let partitionIndex  = partition(&arr, left, right)
+    quickSort(arr: &arr, left: left, right: partitionIndex - 1)
+    quickSort(arr: &arr, left: partitionIndex + 1, right: right)
 }
 
 func partition(_ arr: inout Array<Int>, _ left: Int, _ right: Int) -> Int {
@@ -158,7 +156,7 @@ var len = 0
 func buildMaxHeap(_ arr: inout Array<Int>) {
     len = arr.count
 
-    var i = len / 2
+    var i = len / 2 - 1
     while i >= 0 {
         heapify(&arr, i)
         i -= 1
@@ -246,3 +244,7 @@ var selectArr = [9, 6, 4, 2, 1, 3, 7, 8, 5]
 let index = Int(arc4random_uniform(8))
 let value = selectIndex(&selectArr, 0, selectArr.count - 1, index)
 print("第\(index)个大的数为: \(value)")
+
+let strvalue = "asadfaf"
+let charct = strvalue.index(strvalue.startIndex, offsetBy: 1)
+let va = strvalue[charct]
