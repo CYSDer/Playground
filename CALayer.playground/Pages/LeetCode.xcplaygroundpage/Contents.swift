@@ -315,44 +315,45 @@ removeElement(&dupicateArr, 2)
 dupicateArr
 
 
-// 搜索数组中目标的起始和结束位置
-func searchRange(_ nums: [Int], _ target: Int) -> [Int] {
-    guard nums.count > 0 else {
-        return [-1, -1]
-    }
-    
-    var left = 0, right = nums.count - 1, resArr = [Int]()
-    
-    while left < right {
-        let mid = (right - left) / 2 + left
-        if nums[mid] < target {
-            left = mid + 1
-        } else {
-            right = mid
+example("搜索数组中目标的起始和结束位置") {
+    func searchRange(_ nums: [Int], _ target: Int) -> [Int] {
+        guard nums.count > 0 else {
+            return [-1, -1]
         }
-    }
-    if nums[left] == target {
-        resArr.append(left)
-    } else {
-        return [-1, -1]
-    }
-    
-    left = 0; right = nums.count - 1
-    while left < right {
-        let mid = (right - left + 1) / 2 + left
-        if nums[mid] > target {
-            right = mid - 1
-        } else {
-            left = mid
+        
+        var left = 0, right = nums.count - 1, resArr = [Int]()
+        
+        while left < right {
+            let mid = (right - left) / 2 + left
+            if nums[mid] < target {
+                left = mid + 1
+            } else {
+                right = mid
+            }
         }
+        if nums[left] == target {
+            resArr.append(left)
+        } else {
+            return [-1, -1]
+        }
+        
+        left = 0; right = nums.count - 1
+        while left < right {
+            let mid = (right - left + 1) / 2 + left
+            if nums[mid] > target {
+                right = mid - 1
+            } else {
+                left = mid
+            }
+        }
+        
+        if nums[right] == target {
+            resArr.append(right)
+        }
+        return resArr
     }
-    
-    if nums[right] == target {
-        resArr.append(right)
-    }
-    return resArr
+    print(searchRange([1,2,3,3,4,5,6], 3))
 }
-print(searchRange([1,2,3,4,5,6], 3))
 
 
 // 判断是否为有效数独
@@ -422,8 +423,8 @@ class Solution {
         
         if board[x][y] == "." {
             for k in 1...9 {
-                if isValid(&board, x, y, Character.init("\(k)")) {
-                    board[x][y] = Character.init("\(k)")
+                if isValid(&board, x, y, Character("\(k)")) {
+                    board[x][y] = Character("\(k)")
                     var nextX = x
                     var nextY = y + 1
                     if nextY == 9 {
@@ -448,7 +449,6 @@ class Solution {
         }
     }
     
-    
     func isValid(_ board: inout [[Character]], _ x:  Int, _ y: Int, _ k: Character) -> Bool {
         for i in 0..<9 {
             if board[i][y] == k || board[x][i] == k || board[3*(x/3)+i/3][3*(y/3)+i%3] == k {
@@ -460,10 +460,10 @@ class Solution {
     
     init() {
         solveSudoku(&sudoArr)
-        print(sudoArr)
+        sudoArr.forEach { print($0) }
     }
 }
-//Solution()
+Solution()
 
 class Sodution {
     
@@ -579,7 +579,7 @@ class SolutionC {
         print(combinationSum([10,1,2,7,6,1,5], 8))
     }
 }
-//SolutionC()
+SolutionC()
 
 
 class SolutionS {

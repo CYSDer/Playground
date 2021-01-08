@@ -168,6 +168,28 @@ class TreeNodeSolution {
         
         return true
     }
+    
+    // 判断一颗二叉树是否为二叉搜索树
+    func isValidBST(root: TreeNode?) -> Bool {
+        return helper(node: root, nil, nil)
+    }
+
+    func helper(node: TreeNode?, _ min: Int?, _ max: Int?) -> Bool
+    {
+        guard let node = node else { return true }
+        
+        // 所有右子树节点的值都必须大于根节点的值
+        if let min = min, node.val <= min {
+            return false
+        }
+        
+        // 所有左子树节点的值都必须小于根节点的值
+        if let max = max, node.val >= max {
+            return false
+        }
+        
+        return helper(node: node.left, min, node.val) && helper(node: node.right, node.val, max)
+    }
 }
 
 let rootNode = TreeNode(10)

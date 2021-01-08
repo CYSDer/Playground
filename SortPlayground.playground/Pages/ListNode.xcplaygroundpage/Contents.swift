@@ -256,6 +256,56 @@ class ListNodeSolution {
     
 }
 
+example("两数相加") {
+    
+    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        
+        let head = ListNode(0)
+        
+        var p = l1, q = l2
+        var remainder = 0, nextNode: ListNode? = head
+        
+        while p != nil || q != nil {
+            
+            let sum = (p?.val ?? 0) + (q?.val ?? 0) + remainder
+            
+            remainder = sum / 10
+            nextNode?.next = ListNode(sum % 10)
+            nextNode = nextNode?.next
+            
+            if p != nil {
+                p = p?.next
+            }
+            
+            if q != nil {
+                q = q?.next
+            }
+        }
+        
+        if remainder > 0 {
+            nextNode?.next = ListNode(remainder)
+        }
+        
+        return head.next
+    }
+    
+    
+    let list1 = ListNode(2)
+    list1.next = ListNode(4)
+    list1.next?.next = ListNode(3)
+    
+    let list2 = ListNode(5)
+    list2.next = ListNode(6)
+    list2.next?.next = ListNode(4)
+    
+    var result = addTwoNumbers(list1, list2)
+    while result != nil {
+        print(result!.val)
+        result = result?.next
+    }
+}
+
+
 func printList(_ head: ListNode?) {
     var head = head
     var nodeArr = [String]()

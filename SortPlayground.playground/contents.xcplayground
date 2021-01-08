@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios'>
     <pages>
-        <page name='SortArray'/>
+        <page name='Sort'/>
         <page name='String'/>
         <page name='ListNode'/>
         <page name='TreeNode'/>
+        <page name='Stack'/>
+        <page name='Nums'/>
     </pages>
 </playground>

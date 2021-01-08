@@ -1,92 +1,10 @@
 //: Playground - noun: a place where people can play
 
-import UIKit
+import Foundation
 
-var str = "Hello, playground"
-
-var totalSteps: Int = 0 {
-    willSet(newTotalSteps) {
-        print("About to set totalSteps to \(newTotalSteps)")
-    }
-    didSet {
-        if totalSteps > oldValue  {
-            print("Added \(totalSteps - oldValue) steps")
-        }
-    }
-}
-
-let optionalString: String? = nil ?? "def"
-optionalString
-
-let precomposed: Character = "\u{D55C}"
-let decomposed: Character = "\u{1112}\u{1161}\u{11AB}"
-
-let preStr = String(precomposed)
-let decStr = String(decomposed)
-preStr.count
-decStr.count
-preStr.endIndex
-
-enum People: String {
-    case man, woman
-}
-
-People.init(rawValue: "man")
-
-
-// 求最长不重复子串长度
-func lengthOfLongestSubstring(str: String) -> Int {
-    var dict = [Character: Int]()
-    var i = -1, res = 0
-    for j in 0..<str.count {
-        let character = str[str.index(str.startIndex, offsetBy: j)]
-        if let index = dict[character] {
-            i = max(i, index)
-        }
-        dict[character] = j
-        res = max(res, j - i)
-    }
-    return res
-}
-print(lengthOfLongestSubstring(str: "abcdabcdabbbc"))
-
-// 求最长公共前缀
-func longestCommonPrefix(strs: [String]) -> String {
-    
-    guard !strs.isEmpty else {
-        return ""
-    }
-    
-    let firstStr = strs.first!
-    for i in 0..<firstStr.count {
-        let characterIndex = firstStr.index(firstStr.startIndex, offsetBy: i)
-        let character = firstStr[characterIndex]
-        for j in 1..<strs.count {
-            if strs[j].count == i || strs[j][characterIndex] != character {
-                return String(firstStr.prefix(i))
-            }
-        }
-    }
-    
-    return firstStr
-}
-print(longestCommonPrefix(strs: ["flower", "flow", "flight"]))
-
-// 求字符串的全排列
-class Solution {
+example("求字符串的全排列") {
     var res = [String]()
     var characters = [Character]()
-    
-    func checkInclusion(_ s1: String, _ s2: String) -> Bool {
-        permutation(s1)
-        for str in res {
-            if s2.contains(str) {
-                return true
-            }
-        }
-        
-        return false
-    }
     
     func permutation(_ str: String) -> [String] {
         characters = str.sorted()
@@ -119,15 +37,11 @@ class Solution {
         characters[a] = characters[b]
         characters[b] = characterA
     }
+    
+    print(permutation("abc"))
 }
 
-let solution = Solution()
-print(solution.permutation("abc"))
-print(solution.checkInclusion("abc", "abcbbba"))
-
-// 复原IP地址
-class SolutionIP {
-    
+example("复原IP地址") {
     let segmentCount = 4
     var res = [String]()
     var segments = [0, 0, 0, 0]
@@ -170,15 +84,13 @@ class SolutionIP {
             }
         }
     }
+    
+    print(restoreIpAddresses("010010"))
 }
 
-let ipSolution = SolutionIP()
-print(ipSolution.restoreIpAddresses("010010"))
-
-// 字符串单词翻转
-class SolutionRevserse {
+example("字符串单词翻转") {
     // 利用swift提供的API
-    static func reverseWords(_ s: String) -> String {
+    func reverseWordsSystem(_ s: String) -> String {
         return s.components(separatedBy: CharacterSet.whitespaces)
             .filter({ !$0.isEmpty })
             .reversed()
@@ -205,7 +117,6 @@ class SolutionRevserse {
             left += 1
         }
     }
-    
     
     func reverse(_ left: Int, _ right: Int) {
         var left = left, right = right
@@ -237,46 +148,84 @@ class SolutionRevserse {
         reverseEachWord()
         return String(characters)
     }
+    
+    print(reverseWords("a good   example!"))
+    print(reverseWords(" a  good  example! "))
 }
-print(SolutionRevserse.reverseWords("a good   example!"))
-print(SolutionRevserse().reverseWords(" a  good  example! "))
 
-
-// 火柴拼正方形
-class MakeSquare {
-    
-    func makesquare(_ nums: [Int]) -> Bool {
-        
-        if nums.count < 4 {
-            return false
+example("最长公共前缀") {
+    func longestCommonPrefix(_ strs: [String]) -> String {
+        if strs.isEmpty {
+            return ""
         }
         
-        let sum = nums.reduce(0, +)
-        if sum % 4 != 0 {
-            return false
-        }
-        
-        var buckets = Array<Int>.init(repeating: 0, count: 4)
-        return backtrack(0, nums.sorted(), sum / 4, &buckets)
-    }
-    
-    private func backtrack(_ i: Int, _ nums: [Int], _ edge: Int, _ bucket: inout [Int]) -> Bool {
-        if i >= nums.count {
-            return true
-        }
-        
-        for j in 0..<4 {
-            if bucket[j] + nums[i] > edge {
-                continue
-            }
+        let firstStr = strs[0]
+        var otherStr = ""
+        for i in 0..<strs[0].count {
+            let c = firstStr[firstStr.index(firstStr.startIndex, offsetBy: i)]
             
-            bucket[j] += nums[i]
-            if backtrack(i + 1, nums, edge, &bucket) {
-                return true
+            for j in 1..<strs.count {
+                otherStr = strs[j]
+                if i == otherStr.count || otherStr[otherStr.index(otherStr.startIndex, offsetBy: i)] != c {
+                    return String(firstStr.prefix(i))
+                }
             }
-            bucket[j] -= nums[i]
+        }
+        return firstStr
+    }
+    print(longestCommonPrefix(["flower", "flow", "flight"]))
+}
+
+example("最长回文字") {
+    func longestPalindrome(_ s: String) -> String {
+        guard s.count > 1 else {
+            return ""
+        }
+        var start = 0, end = 0
+
+        func expandAroundCenter(_ str: String, _ left: Int, _ right: Int) -> Int {
+            var left = left, right = right
+            while left >= 0 && right < str.count && str[str.index(str.startIndex, offsetBy: left)] == str[str.index(str.startIndex, offsetBy: right)] {
+                left -= 1
+                right += 1
+            }
+            return right -  left -  1
         }
         
-        return false
+        for i in 0..<s.count {
+            let len1 = expandAroundCenter(s, i, i)
+            let len2 = expandAroundCenter(s, i, i + 1)
+            
+            let len = max(len1, len2)
+            if len > end - start {
+                start = i - (len - 1) / 2
+                end = i + len / 2
+            }
+        }
+        
+        let startIndex = s.index(s.startIndex, offsetBy: start)
+        let endIndex = s.index(s.startIndex, offsetBy: end)
+        
+        return String(s[startIndex...endIndex])
     }
+    print(longestPalindrome("abcddcb"))
+}
+
+example("最长不重复子串") {
+    func lengthOfLongestSubstring(_ s: String) -> Int {
+        var dict = [Character : Int](), i = 0, res = 0
+        
+        for j in 0..<s.count {
+            let c = s[s.index(s.startIndex, offsetBy: j)]
+            if dict[c] != nil {
+                i = max(dict[c]!, i)
+            }
+            res = max(res, j - i + 1)
+            dict[c] = j + 1
+        }
+        
+        return res
+    }
+
+    print(lengthOfLongestSubstring("abcabcdbbcdef"))
 }

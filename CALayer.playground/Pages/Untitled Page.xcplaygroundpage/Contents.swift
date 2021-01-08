@@ -20,8 +20,8 @@ class MyViewController : UIViewController {
         shapeLayer.frame = view.frame
         shapeLayer.path = UIBezierPath(arcCenter: view.center, radius: 100, startAngle: .pi, endAngle: -.pi, clockwise: false).cgPath
         shapeLayer.opacity = 1
-        shapeLayer.lineCap = "round"
         shapeLayer.lineWidth = 5
+        shapeLayer.lineCap = .round
         shapeLayer.strokeColor = UIColor.lightGray.cgColor
         shapeLayer.fillColor = UIColor.clear.cgColor
         view.layer.addSublayer(shapeLayer)
