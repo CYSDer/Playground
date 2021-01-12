@@ -7,7 +7,7 @@ example("求字符串的全排列") {
     var characters = [Character]()
     
     func permutation(_ str: String) -> [String] {
-        characters = str.sorted()
+        characters = Array(str)
         dfs(0)
         return res
     }
@@ -38,7 +38,7 @@ example("求字符串的全排列") {
         characters[b] = characterA
     }
     
-    print(permutation("abc"))
+    print(permutation("abbc"))
 }
 
 example("复原IP地址") {
@@ -55,7 +55,7 @@ example("复原IP地址") {
         
         if index == segmentCount {
             if start == str.count {
-                res.append(segments.map( {String($0) }).joined(separator: "."))
+                res.append(segments.map({ String($0) }).joined(separator: "."))
             }
             return
         }
@@ -143,6 +143,7 @@ example("字符串单词翻转") {
     }
     
     func reverseWords(_ str: String) -> String {
+        characters.removeAll()
         trimSpace(str)
         reverse(0, characters.count - 1)
         reverseEachWord()
@@ -228,4 +229,29 @@ example("最长不重复子串") {
     }
 
     print(lengthOfLongestSubstring("abcabcdbbcdef"))
+}
+
+example("简化路径") {
+    func simplifyPath(_ path: String) -> String {
+        if path.isEmpty {
+            return "/"
+        }
+        
+        var completedPath = [String]()
+        var compnent = path.components(separatedBy: "/").filter({ !$0.isEmpty && $0 != " " })
+        while !compnent.isEmpty {
+            let name = compnent.removeFirst()
+            if name == ".." {
+                if !completedPath.isEmpty {
+                    completedPath.removeLast()
+                }
+            } else if name != "." {
+                completedPath.append(name)
+            }
+        }
+        
+        return "/" + completedPath.joined(separator: "/")
+    }
+    
+    print(simplifyPath("/home/"))
 }

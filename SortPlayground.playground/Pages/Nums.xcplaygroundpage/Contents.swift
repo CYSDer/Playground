@@ -370,7 +370,7 @@ example("递归解数独") {
     sudoArr.forEach { print($0) }
 }
 
-example("非递归解数独") {
+example("解数独所有解") {
     var results: [[Set<Character>]] = {
         var results = [[Set<Character>]]()
         for _ in 0..<9 {
