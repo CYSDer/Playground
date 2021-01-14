@@ -7,5 +7,6 @@
         <page name='TreeNode'/>
         <page name='Stack'/>
         <page name='Nums'/>
+        <page name='Toutiao'/>
     </pages>
 </playground>

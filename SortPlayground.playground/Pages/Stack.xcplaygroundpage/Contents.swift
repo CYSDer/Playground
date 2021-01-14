@@ -245,3 +245,32 @@ func merge(meetingTimes: [MeetingTupe]) -> [MeetingTupe] {
     }
     return res
 }
+
+class MinStack {
+    
+    var statck: [Int]
+    var minStack: [Int]
+    
+    init() {
+        statck = []
+        minStack = [Int.max]
+    }
+    
+    func push(_ x: Int) {
+        statck.append(x)
+        minStack.append(min(minStack.last!, x))
+    }
+    
+    func pop() {
+        statck.removeLast()
+        minStack.removeLast()
+    }
+    
+    func top() -> Int {
+        return statck.last!
+    }
+    
+    func getMin() -> Int {
+        return minStack.last!
+    }
+}
