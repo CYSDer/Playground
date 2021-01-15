@@ -208,8 +208,38 @@ example("动态规划") {
         print(climbStairs(10))
     }
 
+    example("最大正方形") {
+        func maximalSquare(_ matrix: [[Character]]) -> Int {
+            var maxside: Int32 = 0
+            if matrix.isEmpty || matrix[0].isEmpty {
+                return Int(maxside)
+            }
+            
+            let rows = matrix.count, colums = matrix[0].count
+            var nums = [[Int32]](repeating: [Int32](repeating: 0, count: colums), count: rows)
+            for i in 0..<rows {
+                for j in 0..<colums {
+                    if matrix[i][j] == "1" {
+                        if i == 0 || j == 0 {
+                            nums[i][j] = 1
+                        } else {
+                            nums[i][j] = min(nums[i][j - 1], nums[i - 1][j - 1], nums[i - 1][j]) + 1
+                        }
+                        maxside = max(nums[i][j], maxside)
+                    }
+                }
+            }
+            
+            return Int(maxside * maxside)
+        }
+        
+        print(maximalSquare([["1","0","1","0","0"],
+                             ["1","0","1","1","1"],
+                             ["1","1","1","1","1"],
+                             ["1","0","0","1","0"]]))
+    }
     
-    example("最小子序和") {
+    example("最大子序和") {
         func maxSubArray(_ nums: [Int]) -> Int {
             if nums.isEmpty { return 0 }
             var nums = nums
@@ -238,5 +268,47 @@ example("动态规划") {
         
         print(countPaths(7, 3))
     }
+    
+    example("三角形最小路径和") {
+        func minimumTotal(_ triangle: [[Int]]) -> Int {
+            var nums = triangle
+            let count = triangle.count
+            for i in 1..<count {
+                nums[i][0] = nums[i - 1][0] + nums[i][0]
+                for j in 1..<i {
+                    nums[i][j] = min(nums[i - 1][j - 1], nums[i - 1][j]) + nums[i][j]
+                }
+                nums[i][i] = nums[i - 1][i - 1] + nums[i][i]
+            }
+            
+            var minTotal = nums[count - 1][0]
+            for i in 1..<count {
+                minTotal = min(minTotal, nums[count - 1][i])
+            }
+            return minTotal
+        }
+        
+        print(minimumTotal([[2],[3,4],[6,5,7],[4,1,8,3]]))
+    }
 
+    example("最长上升子序列") {
+        func lengthOfLIS(_ nums: [Int]) -> Int {
+            if nums.isEmpty {
+                return 0
+            }
+            
+            var maxans = 1, dp = [Int](repeating: 1, count: nums.count)
+            for i in 1..<nums.count {
+                for j in 0..<i {
+                    if nums[i] > nums[j] {
+                        dp[i] = max(dp[i], dp[j] + 1)
+                    }
+                }
+                maxans = max(maxans, dp[i])
+            }
+            return maxans
+        }
+        
+        print(lengthOfLIS([10,9,2,5,3,7,101,18]))
+    }
 }
