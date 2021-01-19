@@ -86,9 +86,8 @@ example("两数相加") {
     func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
         var dict = [Int: Int]()
         for i in 0..<nums.count {
-            let index = dict[target - nums[i]]
-            if index != nil {
-                return [index!, i]
+            if let index = dict[target - nums[i]] {
+                return [index, i]
             }  else {
                 dict[nums[i]] = i
             }
@@ -108,7 +107,7 @@ example("三数相加等于目标值") {
         
         for i in 0..<nums.count - 2 {
             if i > 0 && nums[i] == nums[i - 1] {
-                break
+                continue
             }
             
             var j = i + 1
@@ -448,4 +447,148 @@ example("解数独所有解") {
     
     solveSudoku(&sudoArr)
     sudoArr.forEach { print($0) }
+}
+
+example("接雨水") {
+    // O(n)
+    func trap(_ height: [Int]) -> Int {
+        var left = 0, right = height.count - 1
+        var leftMax = 0, rightMax = 0, res = 0
+        while left < right {
+            if height[left] < height[right] {
+                if height[left] >= leftMax {
+                    leftMax = height[left]
+                } else {
+                    res += leftMax - height[left]
+                }
+                left += 1
+            } else {
+                if height[right] >= rightMax {
+                    rightMax = height[right]
+                } else {
+                    res += rightMax - height[right]
+                }
+                right -= 1
+            }
+        }
+        
+        return res
+    }
+    
+    // O(n*n)
+    func traps(_ height: [Int]) -> Int {
+        var res = 0
+        for i in 1..<height.count {
+            var maxLeft = height[i]
+            var maxRight = height[i]
+            
+            for j in 0..<i {
+                maxLeft = max(maxLeft, height[j])
+            }
+            
+            for k in i+1..<height.count {
+                maxRight = max(maxRight, height[k])
+            }
+            res += min(maxLeft, maxRight) - height[i]
+        }
+        
+        return res
+    }
+    
+    print(trap([0,1,0,2,1,0,1,3,2,1,2,1]))
+    print(traps([0,1,0,2,1,0,1,3,2,1,2,1]))
+}
+
+example("岛屿的最大面积") {
+    func maxAreaOfIsland(_ grid: [[Int]]) -> Int {
+        
+        var ans = 0, grid = grid
+        for i in 0..<grid.count {
+            for j in 0..<grid[0].count {
+                var cur = 0
+                var stacki = [i]
+                var stackj = [j]
+                while !stacki.isEmpty {
+                    let curi = stacki.removeLast(), curj = stackj.removeLast()
+                    if curi < 0 || curj < 0 || curi == grid.count || curj == grid[0].count || grid[curi][curj] == 0 {
+                        continue
+                    }
+                    cur += 1
+                    grid[curi][curj] = 0
+                    let di = [0, 0, 1, -1]
+                    let dj = [1, -1, 0, 0]
+                    for k in 0..<4 {
+                        let nexti = curi + di[k], nextj = curj + dj[k]
+                        stacki.append(nexti)
+                        stackj.append(nextj)
+                    }
+                }
+                ans = max(ans, cur)
+            }
+        }
+        
+        return ans
+    }
+    
+    print(maxAreaOfIsland([[0,0,1,0,0,0,0,1,0,0,0,0,0],
+                           [0,0,0,0,0,0,0,1,1,1,0,0,0],
+                           [0,1,1,0,1,0,0,0,0,0,0,0,0],
+                           [0,1,0,0,1,1,0,0,1,0,1,0,0],
+                           [0,1,0,0,1,1,0,0,1,1,1,0,0],
+                           [0,0,0,0,0,0,0,0,0,0,1,0,0],
+                           [0,0,0,0,0,0,0,1,1,1,0,0,0],
+                           [0,0,0,0,0,0,0,1,1,0,0,0,0]]))
+}
+
+example("省份数量") {
+    func findCircleNum(_ isConnected: [[Int]]) -> Int {
+        let provinces = isConnected.count
+        var visited = [Bool](repeating: false, count: provinces)
+        var circles = 0, queue = [Int]()
+        for i in 0..<provinces {
+            if !visited[i] {
+                queue.append(i)
+                while !queue.isEmpty {
+                    let j = queue.removeLast()
+                    visited[j] = true
+                    for k in 0..<provinces {
+                        if isConnected[j][k] == 1, !visited[k] {
+                            queue.append(k)
+                        }
+                    }
+                }
+                circles += 1
+            }
+        }
+        return circles
+    }
+    
+    print(findCircleNum([[1,1,0],[1,1,0],[0,0,1]]))
+}
+
+example("合并区间") {
+    func merge(_ interval: [[Int]]) -> [[Int]] {
+        
+        if interval.isEmpty || interval[0].count != 2 {
+            return [[]]
+        }
+        
+        let interval = interval.sorted(by: {$0[0] < $1[0]})
+        var res = [[Int]](), curArea = interval[0]
+        for i in 1..<interval.count {
+            let area = interval[i]
+            let left = area[0], right = area[1]
+            if curArea[1] < left {
+                res.append(curArea)
+                curArea = area
+            } else if curArea[1] < right {
+                curArea[1] = right
+            }
+        }
+        res.append(curArea)
+        
+        return res
+    }
+    
+    print(merge([[1,3],[2,6],[8,10],[15,18]]))
 }
