@@ -255,3 +255,50 @@ example("简化路径") {
     
     print(simplifyPath("/home/"))
 }
+
+example("可变参数") {
+    /*
+     - (void)testMultiple:(NSString *)name ... {
+         
+         // 定义va_list变量(指针)
+         va_list arg_list;
+
+         if (name) {
+             
+             // 把arg_list指向name这个可变形参的第一个位置
+             va_start(arg_list, name);
+
+             // 提取一个参数, 返回一个NSString*, 并将指针后移
+             NSString *temp_arg = va_arg(arg_list, id);
+             while (temp_arg) {
+                 NSLog(@"%@", temp_arg);
+                 // 继续后移, 遇到nil跳出循环
+                 temp_arg = va_arg(arg_list, id);
+             }
+
+             va_end(arg_list);
+
+         }
+
+     }
+     */
+    print(1)
+}
+
+example("求数组中重复数字") {
+    func findRepeatNum(_ nums: [Int]) -> Int {
+        var nums = nums
+        for i in 0..<nums.count {
+            while nums[i] != i {
+                if nums[i] == nums[nums[i]] {
+                    return nums[i]
+                }
+                swapArr(&nums, nums[i], i)
+            }
+        }
+        
+        return -1
+    }
+    
+    print(findRepeatNum([2, 3, 1, 0, 2, 5, 3]))
+}
