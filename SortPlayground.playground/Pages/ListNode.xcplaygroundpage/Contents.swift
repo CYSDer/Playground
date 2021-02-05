@@ -236,7 +236,7 @@ class ListNodeSolution {
         currentNode = head
         while currentNode != nil {
             let randomNode = currentNode?.random
-            currentNode?.next?.random = randomNode
+            currentNode?.next?.random = randomNode?.next
             currentNode = currentNode?.next?.next
         }
         
